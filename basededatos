@@ -1,0 +1,144 @@
+const { MongoClient, ObjectId } = require('mongodb');
+const { fakerES_MX, faker } = require('@faker-js/faker');
+
+const uri = "mongodb+srv://juanjoseospinam2005:12345@cluster0.cxgw9ax.mongodb.net/?retryWrites=true&w=majority";
+
+async function BasesDeDatos() {
+   const client = new MongoClient(uri);
+
+   try {
+       await client.connect();
+       const dbname = "entre_especies";
+       const db = await client.db(dbname).createCollection("Proveedores", {
+           validator: {
+              $jsonSchema: {
+                 bsonType: "object",
+                 title: "usuario validacion",
+                 required: ["idProveedor", "NitProveedor", "Nombre", "Apellidos", "Correo", "Estado"],
+                 properties: {
+                    idProveedor: {
+                        bsonType: "int",
+                    },
+                    NitProveedor: {
+                       bsonType: "int",
+                    },
+                    Nombre: {
+                       bsonType: "string",
+                    },
+                    Apellidos: {
+                     bsonType: "string",
+                    },
+                    Documento: {
+                     bsonType:  "long" ,
+                    },
+                    Correo: {
+                        bsonType: "string",
+                    },
+                    Direccion: {
+                        bsonType: "string",
+               
+                    }
+                 }
+              }
+           }
+        });
+
+   } catch(e) {
+       console.log(e);
+   } finally {
+      await client.close();
+   }
+}
+
+async function insertar(nuevoproveedor) {
+    const client = new MongoClient(uri);
+
+    try {
+        await client.connect();
+        const result = await client.db("entre_especies").collection("Proveedores").insertOne(nuevoproveedor);
+        console.log(`Se creó un nuevo usuario con el ID: ${result.insertedId}`);
+        console.log(nuevoproveedor);
+    } catch(e) {
+        console.log(e);
+    } finally {
+        await client.close();
+    }
+}
+
+async function insertarRegistros(numeroderegistro) {
+   const client = new MongoClient(uri);
+   try {
+       await client.connect();
+       const Proveedores = await client.db("entre_especies").collection("Proveedores").find().toArray();
+       const datos = [];
+       for (let j = 1; j <= numeroderegistro; j++) {
+         let nombre = fakerES_MX.person.firstName(), apellido = fakerES_MX.person.lastName();
+         const dato = {
+            idProveedor: Usuarios.length + j,
+            NitProveedor: faker.number.bigInt({ min: 10000, max: 500000 }),
+            Nombre: nombre,
+            Apellidos: apellido,
+            Documento: faker.number.bigInt({ min: 10000, max: 500000 }),
+            Correo: faker.internet.email({ firstName: nombre, lastName: apellido }),
+            Direccion: direccion
+         };
+         datos.push(dato);
+         console.log(`Se han insertado: ${datos.length} datos`);
+       }
+       const daticos = await client.db("entre_especies").collection("Proveedores").insertMany(datos);
+       console.log(`todos los datos han sido agregados exitosamente`);
+      
+   } catch(e) {
+       console.log(e);
+   } finally {
+      await client.close();
+   }
+}
+
+async function buscar(Buscarproveedor) {
+    const client = new MongoClient(uri);
+    
+    try {
+        await client.connect();
+        const resultado = await client.db("entre_especies").collection("Proveedores").find({Nombre: Buscarproveedor}).toArray();
+        if (resultado.length > 0)
+
+ {
+            console.log(`Se encontró un usuario con los siguientes datos: ${Buscarproveedor}`);
+            console.log(resultado);
+        } else {
+            console.log(`No se encontró el usuario.`);
+        }
+    } catch(e) {
+        console.log(e);
+    } finally {
+       await client.close();
+    }
+}
+
+async function actualizar(idProveedor, nuevosDatos) {
+   const client = new MongoClient(uri);
+ 
+   try {
+     await client.connect();
+     const collection = client.db("entre_especies").collection("Proveedores");
+     const filter = { _id:  new ObjectId(idProveedor) };
+     const update = { $set: nuevosDatos };
+     const result = await collection.updateOne(filter, update);
+ 
+     if (result.matchedCount > 0) {
+       console.log(`Se actualizó el documento con el ID: ${idProveedor}`);
+     } else {
+       console.log(`No se encontró ningún documento con el ID: ${idProveedor}`);
+     }
+ 
+     console.log(result);
+   } catch(e) {
+     console.log(e);
+   } finally {
+     await client.close();
+   }
+}
+
+
+
