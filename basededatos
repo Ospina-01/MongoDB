@@ -12,7 +12,7 @@ async function BasedeDatos(){
                 $jsonSchema:{
                     bsonType: 'object',
                     title:'validacionUsuario',
-                    required:['idCompra','idProveedor', 'fecha_compra','formpa'],
+                    required:['idCompra','idProveedor', 'fecha_compra','formpa','total'],
                     properties:{
                         idCompra:{
                             bsonType:'int'
@@ -25,6 +25,9 @@ async function BasedeDatos(){
                         },
                         formpa:{
                             bsonType:"string"
+                        },
+                        total:{
+                            bsonType:"int"
                         }
                     }
                 }
@@ -60,6 +63,7 @@ async function PoblateCollection(NumeroRegistros){
                 idProveedor: faker.helpers.arrayElement(proveedores).idProveedor,
                 fecha_compra: fecha_compra,
                 formpa: faker.helpers.arrayElement(["Efectivo","Transferencia"]),
+                total: faker.number.int({min:10000,max:999999}),
 
 
             }
