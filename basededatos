@@ -657,13 +657,13 @@ const URI ="mongodb+srv://juanjoseospinam2005:12345@cluster0.cxgw9ax.mongodb.net
 //     const client = new MongoClient(URI);
 //     try {
 //         await client.connect();
-//         const result = await client.db('entreespecies').collection('proveedores').aggregate([
+//         const result = await client.db('entreespecies').collection('cita').aggregate([
 //             {
 //                 $lookup: {
-//                     from: 'Usuarios',
-//                     localField: 'idUsuario',
-//                     foreignField: 'idUsuario',
-//                     as: 'usuario'
+//                     from: 'cita',
+//                     localField: 'idCita',
+//                     foreignField: 'idCita',
+//                     as: 'cita'
 //                 }
 //             }
 //         ]).toArray();
@@ -683,6 +683,352 @@ const URI ="mongodb+srv://juanjoseospinam2005:12345@cluster0.cxgw9ax.mongodb.net
 //     try {
 //       await client.connect();
 //       const result = await client.db('entreespecies').collection('proveedores').find().sort({idProveedor:1}).toArray();
+//       console.log(result);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       await client.close();
+//     }
+//   }ejemploUnwind();
+const {MongoClient}= require('mongodb');
+const { faker } = require('@faker-js/faker');
+const URI ="mongodb+srv://juanjoseospinam2005:12345@cluster0.cxgw9ax.mongodb.net/?retryWrites=true&w=majority";
+
+// async function BasedeDatos(){
+//         const Client = new MongoClient(URI);
+    
+//         try{
+//             await Client.connect();
+//             const result = await Client.db('entreespecies').createCollection("compras",{
+//                 validator:{
+//                     $jsonSchema:{
+//                         bsonType: 'object',
+//                         title:'validacionUsuario',
+//                         required:['idCita','Nomcita', 'fecha_cita','estado','Precio'],
+//                         properties:{
+//                             idCita:{
+//                                 bsonType:'int'
+//                             },
+//                             Nomcita :{
+//                                 bsonType: 'string'
+//                             },
+//                             fecha_cita:{
+//                                 bsonType: "date"
+//                             },
+//                             estado:{
+//                                 bsonType:"string"
+//                             },
+//                             precio:{
+//                                 bsonType:"int"
+//                             }
+//                         }
+//                     }
+//                 }
+//             })
+//             if (result){
+//                 console.log("Base de datos creada correctamente");
+//             }else{
+//                 console.log("No se ha creado la base de datos");
+//             }
+//         }catch(e){
+//             console.log(e);
+//         }finally{
+//             await Client.close();
+//         }
+//     }
+    
+    
+//     async function PoblateCollection(NumeroRegistros){
+    
+//         const Client = new MongoClient(URI)
+    
+//         try {
+//             await Client.connect();
+//             const citas = await Client.db("entreespecies").collection("cita").find({}).toArray();
+//             const Datos = [];
+//             for (let i=0; i<NumeroRegistros;i++){
+//                 var  fecha_cita = faker.date.recent();
+//                 var  Nomcita = faker.person.firstName();
+//                 const DatosInsertar = {
+    
+//                     idCita: citas.length+i,
+//                     Nomcita:Nomcita,
+//                     fecha_cita: fecha_cita,
+//                     estado: faker.helpers.arrayElement(["activo","inactivo"]),
+//                     precio: faker.number.int({min:10000,max:999999}),
+    
+    
+//                 }
+//                 Datos.push(DatosInsertar);
+//                 console.log(`Se han insertado: ${Datos.length} datos`)
+//             }
+//             const Result= await Client.db('entreespecies').collection('cita').insertMany(Datos)
+            
+//         }catch(e){
+//             console.log(e);
+//         }finally{
+//             await Client.close();
+//         }
+    
+    
+//     }
+//     // BasedeDatos();
+//     PoblateCollection(2000)
+// Función para insertar un documento en una colección
+
+// async function insertOneDocument() {
+//     const client = new MongoClient(URI);
+//     try {
+//       await client.connect();
+//       var  fecha_cita = faker.date.recent();
+//       var  Nomcita = faker.person.firstName();
+//       const DatosInsertar = {
+
+//           idCita: 2001,
+//           Nomcita:Nomcita,
+//           fecha_cita: fecha_cita,
+//           estado: faker.helpers.arrayElement(["activo","inactivo"]),
+//           precio: faker.number.int({min:10000,max:999999}),
+
+
+//       };
+//       const result = await client.db('entreespecies').collection('cita').insertOne(DatosInsertar);
+//       console.log(`Documento insertado con ID: ${result.insertedId}`);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       await client.close();
+//     }
+//   }insertOneDocument();
+  
+//   Función para insertar varios documentos en una colección
+//   async function insertManyDocuments() {
+//     const client = new MongoClient(URI);
+//     try {
+//       await client.connect();
+//       const citas = await client.db("entreespecies").collection("cita").find({}).toArray();
+//       const Datos = [];
+  
+//       for (let i = 0; i < 9; i++) {
+//         var  fecha_cita = faker.date.recent();
+//         var  Nomcita = faker.person.firstName();
+//         const DatosInsertar = {
+  
+//             idCita: citas.length+i,
+//             Nomcita:Nomcita,
+//             fecha_cita: fecha_cita,
+//             estado: faker.helpers.arrayElement(["activo","inactivo"]),
+//             precio: faker.number.int({min:10000,max:999999}),
+//         };
+//         Datos.push(DatosInsertar);
+//         console.log(`Se han insertado: ${Datos.length} datos`);
+//       }
+//       const result = await client.db('entreespecies').collection('cita').insertMany(Datos);
+//       console.log(`${result.insertedCount} documentos insertados`);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       await client.close();
+//     }
+//   }
+  
+//   insertManyDocuments();
+  
+
+//   // Función para actualizar un documento en una colección
+// async function updateOneDocument(filtroactualizar, update) {
+//     const client = new MongoClient(URI);
+//     try {
+//       await client.connect();
+  
+//       const result = await client.db('entreespecies').collection('cita').updateOne(filtroactualizar, update);
+//       console.log(`${result.modifiedCount} documento(s) actualizado(s)`);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       await client.close();
+//     }
+//   }
+//   const filtroactualizar = { idCita:1}; // Filtro para encontrar el documento a actualizar
+//   const update = { $set: { Nomcita:"bañado pedro" } }; // Actualización a aplicar
+  
+//   updateOneDocument( filtroactualizar, update);
+  
+//   // Función para actualizar varios documentos en una colección
+//   async function updateManyDocuments( filterEn, updateE) {
+//       const client = new MongoClient(URI);
+//       try {
+//         await client.connect();
+    
+//         const result = await client.db('entreespecies').collection('cita').updateMany(filterEn, updateE);
+//         console.log(`${result.modifiedCount} documento(s) actualizado(s)`);
+//       } catch (error) {
+//         console.error(error);
+//       } finally {
+//         await client.close();
+//       }
+//     }
+    
+//     // Ejemplo de uso:
+//     const filterEn = { idCita: { $lt: 100 } }; 
+//     const filtroactualizar= filterEn;// Filtro para encontrar los documentos a actualizar
+//     const updateE = { $set: { estado:"pendiente" } }; // Actualización a aplicar
+    
+//     updateManyDocuments( filterEn, updateE);
+
+//     // Función para buscar un solo documento en una colección
+// async function findDocuments(query) {
+//   const client = new MongoClient(URI);
+//   try {
+//     await client.connect();
+
+//     const result = await client.db('entreespecies').collection('cita').find(query).toArray();
+//     console.log(result);
+//   } catch (error) {
+//     console.error(error);
+//   } finally {
+//     await client.close();
+//   }
+// }
+
+// const query = {
+//   idCita: 123 //documento a buscar
+// };
+
+// findDocuments( query);
+  
+//   Función para buscar documentos en una colección
+//   async function findDocuments() {
+//       const client = new MongoClient(URI);
+//       try {
+//         await client.connect();
+    
+//         const result = await client.db('entreespecies').collection('cita').find().toArray();
+//         console.log(result);
+//       } catch (error) {
+//         console.error(error);
+//       } finally {
+//         await client.close();
+//       }
+//     }
+    
+//     findDocuments("cita");
+
+    // Función para eliminar un documento de una colección
+// async function deleteOneDocument(filter) {
+//   const client = new MongoClient(URI);
+//   try {
+//     await client.connect();
+
+//     const result = await client.db('entreespecies').collection('cita').deleteOne(filter);
+//     console.log(`${result.deletedCount} documento(s) eliminado(s)`);
+//   } catch (error) {
+//     console.error(error);
+//   } finally {
+//     await client.close();
+//   }
+// }
+// const filter = { idCita: 8 }; // Filtro para encontrar el documento a eliminar
+
+// deleteOneDocument( filter);
+  
+//   // Función para eliminar varios documentos de una colección
+// async function deleteManyDocuments() {
+//   const client = new MongoClient(URI);
+//   try {
+//     await client.connect();
+
+//     const result = await client.db('entreespecies').collection('cita').deleteMany(filterE);
+//     console.log(`${result.deletedCount} documento(s) eliminado(s)`);
+//   } catch (error) {
+//     console.error(error);
+//   } finally {
+//     await client.close();
+//   }
+// }
+// const cit= 'cita';
+// const filterE = { idCita: {$gte: 1900}};
+
+// deleteManyDocuments(cit, filterE);
+//     // Función para eliminar una colección
+    // async function dropCollection(collection) {
+    //   const client = new MongoClient(URI);
+    //   try {
+    //     await client.connect();
+    //     const result = await client.db('entreespecies').dropCollection(collection);
+    //     console.log(`Colección '${collection}' eliminada`);
+    //   } catch (error) {
+    //     console.error(error);
+    //   } finally {
+    //     await client.close();
+    //   }
+    // }
+    // const collection = "cita";
+    
+    // dropCollection(collection);
+  
+//     // Función para eliminar una base de datos completa
+//     async function dropDatabase() {
+//       const client = new MongoClient(URI);
+//       try {
+//         await client.connect();
+//         const result = await client.db('entreespecies').dropDatabase();
+//         console.log(`Base de datos '${'entreespecies'}' eliminada`);
+//       } catch (error) {
+//         console.error(error);
+//       } finally {
+//         await client.close();
+//       }
+//     }
+//     const database = "entreespecies";
+    
+//     dropDatabase(database);
+
+//     // Ejemplo de $limit: Obtener solo los primeros 10 documentos
+// async function ejemploLimit() {
+//     const client = new MongoClient(URI);
+//     try {
+//         await client.connect();
+//         const result = await client.db('entreespecies').collection('cita').find().limit(10).toArray();
+//         console.log(result);
+//     } catch (error) {
+//         console.error(error);
+//     } finally {
+//         await client.close();
+//     }
+// }ejemploLimit();
+
+// // Ejemplo de $lookup: Unir documentos de dos colecciones
+// async function ejemploLookup() {
+//     const client = new MongoClient(URI);
+//     try {
+//         await client.connect();
+//         const result = await client.db('entreespecies').collection('compras').aggregate([
+//             {
+//                 $lookup: {
+//                     from: 'compras',
+//                     localField: 'idCompra',
+//                     foreignField: 'idCompra',
+//                     as: 'compra'
+//                 }
+//             }
+//         ]).toArray();
+//         console.log(result);
+//     } catch (error) {
+//         console.error(error);
+//     } finally {
+//         await client.close();
+//     }
+// }
+
+// ejemploLookup();
+
+// // Ejemplo de $sort: Ordenar documentos por un campo específico
+// async function ejemploUnwind() {
+//     const client = new MongoClient(URI);
+//     try {
+//       await client.connect();
+//       const result = await client.db('entreespecies').collection('cita').find().sort({idCita:-1}).toArray();
 //       console.log(result);
 //     } catch (error) {
 //       console.error(error);
